@@ -54,27 +54,27 @@ let carID;
        getSpecific.innerHTML=text
     })
  }
- function addCar(){
-    let newCar={}
-    newCar.brand=document.getElementById("brand").value
-    newCar.model=document.getElementById("model").value
-    newCar.pricePrDay=document.getElementById("pricePrDay").value
-    console.log(newCar)
-    
-    fetch("https://danielcars.azurewebsites.net/api/cars",{
+ async function addCar() {
+    let newCar = {};
+    newCar.brand = document.getElementById("brand").value;
+    newCar.model = document.getElementById("model").value;
+    newCar.pricePrDay = document.getElementById("pricePrDay").value;
+    console.log(newCar);
+  
+    try {
+      const response = await fetch("https://danielcars.azurewebsites.net/api/cars", {
         method: "post",
-        headers:{
-            "Content-Type": "application/json"
+        headers: {
+          "Content-Type": "application/json"
         },
-        body:JSON.stringify(newCar)
-    })
-    .then(res=>res.json())
-    .then(car=>{
-        let text = "<li>ID: "+car.id+"</li><li>Brand: "+car.brand+"</li><li>Model: "+car.model+"</li><li>Price pr day: "+car.pricePrDay+"</li>"
-        document.getElementById("new-car").innerHTML=text
-    })
-
- }
+        body: JSON.stringify(newCar)
+      });
+      const responseText = await response.text();
+      document.getElementById("new-car").innerHTML = responseText;
+    } catch (error) {
+      console.error(error);
+    }
+  }
  function getCarForEdit(){
     carID = document.getElementById("text-for-id2").value
     fetch("http://localhost:8080/api/cars/"+carID)
